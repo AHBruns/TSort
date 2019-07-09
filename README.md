@@ -11,7 +11,7 @@ known as topological sorting, hence the formal name, TSort.
 
 For simplicity here's the oneliner. Run the following in your terminal:
 
-`git clone https://github.com/AHBruns/TSort.git && chmod +x install.sh && ./install.sh`
+`git clone https://github.com/AHBruns/TSort.git && chmod +x TSort/install.sh && ./TSort/install.sh`
 
 Once run, you'll likely have to restart your terminal. After this the utility
  can be called on any file by running any of the following commands:
