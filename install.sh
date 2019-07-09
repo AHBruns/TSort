@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p ~/.tsort/
-cd src
+cd TSort/src
 chmod +x tsort
 cp -f tsort ~/.tsort/
 cp -f node.py ~/.tsort/
