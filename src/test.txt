@@ -1,0 +1,38 @@
+||| DEC entity 1
+||| DEC entity 2
+||| DEC entity 3
+||| DEC entity 4
+
+||| DESC entity 4
+||| DESC entity 2
+blurb number one.
+blah blah blah
+blah blah blah
+blah blah blah
+blah blah blah
+
+||| DEP entity 2
+||| DEP entity 3
+blurb number two.
+blah blah blah
+blah blah blah
+blah blah blah
+blah blah blah
+
+||| DESC entity 3
+||| DEP entity 4
+blurb number three.
+blah blah blah
+blah blah blah
+blah blah blah
+blah blah blah
+
+||| DESC entity 1
+||| DESC entity 4
+||| DEP entity 2
+||| DEP entity 3
+blurb number four.
+blah blah blah
+blah blah blah
+blah blah blah
+blah blah blah
