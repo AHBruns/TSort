@@ -3,13 +3,13 @@
 ### Description
 
 TSort also known as Moen or Moenize (named after my algs. and data 
-structures professor, James Moen) is a command line utility that topologically 
+structures professor, James Moen) is a command-line utility that topologically 
 sorts paragraphs based on their conceptual dependency. This sorting process is 
 known as topological sorting, hence the formal name, TSort.
 
 ### Installation
 
-For simplicity here's the oneliner:
+For simplicity here's the oneliner. Run the following in your terminal:
 
 `git clone https://github.com/AHBruns/TSort.git && cd Tsort && chmod +x install
 .sh && ./install.sh`
@@ -17,20 +17,20 @@ For simplicity here's the oneliner:
 Once run, you'll likely have to restart your terminal. After this the utility
  can be called on any file by running any of the following commands:
  
- - `tsort relative/path/to/input/file /relative/path/to/output/file`
- - `moen relative/path/to/input/file /relative/path/to/output/file`
- - `moenize relative/path/to/input/file /relative/path/to/output/file`
+ - `tsort relative/path/to/input/file relative/path/to/output/file`
+ - `moen relative/path/to/input/file relative/path/to/output/file`
+ - `moenize relative/path/to/input/file relative/path/to/output/file`
  
  **NOTE: The output can overwrite existing files. So, be sure to write to 
- either a non-existing file or an existing file that you're okay with 
+ either a non-existent file or an existing file that you're okay with 
  overwriting.**
  
 
 ### Usage
 
-The TSort uses a sort domain specific language to mark-up paragraphs. The 
+TSort uses a simple domain-specific language to mark-up paragraphs. The 
 TSort language is made up of statements. Each statement gets its own line; no 
-sharing. Additionally, statements are scoped to their proceeding paragraph. 
+sharing. Additionally, statements are tethered to their proceeding paragraph. 
 That is, you should write your document like so:
 ```
 PARAGRAPH A's STATMENTS
@@ -48,12 +48,14 @@ The pipes are there to tell the parser that the line being parsed is a TSort sta
 not a content line. So, ensure that you don't accidentally proceed any of 
 your content lines with three pipes.
 
-Now let's skip to the end and look at the entity part of a statement. In the 
+Now let's skip ahead and look at the entity part of a statement. In the 
 TSort DSL entities are simply names for concepts being discussed in the 
-content of the text. For instance, if you had a paper about binary trees you 
+content of the text.
+
+For instance, if you had a paper about binary trees you 
 might have an entity for the concept of a node, a linked list, a binary 
 search tree, an OBST, and likely many other things as well. Entities are how 
-TSort reasons about which way to order your paragraphs. Importantly, entities
+TSort reasons about which how to order your paragraphs. Importantly, entities
  can include any character except for a newline.
 
 Finally, the operation part of the statement can be any of the following:
