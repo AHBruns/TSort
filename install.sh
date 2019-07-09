@@ -9,6 +9,5 @@ cp -f read_write.py ~/.tsort/
 ln -s -f ~/.tsort/tsort /usr/local/bin/tsort
 ln -s -f ~/.tsort/tsort /usr/local/bin/moen
 ln -s -f ~/.tsort/tsort /usr/local/bin/moenize
-cd ..
-cd ..
+cd ../..
 rm -rf TSort/
