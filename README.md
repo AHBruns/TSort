@@ -1,11 +1,9 @@
-# TSort
+# Melzi
 
 ### Description
 
-TSort also known as Moen or Moenize (named after my algs. and data 
-structures professor, James Moen) is a command-line utility that topologically 
-sorts paragraphs based on their conceptual dependency. This sorting process is 
-known as topological sorting, hence the formal name, TSort.
+Melzi, named after Francesco Melzi, is a command-line utility that topologically 
+sorts text based on conceptual dependency.
 
 ### Installation
 
