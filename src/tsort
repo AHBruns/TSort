@@ -3,36 +3,93 @@
 
 from functools import reduce
 import sys
-import read_write
+import build
+import os
+import uuid
 
 
-def main(rel_input_path, rel_output_path):
-	sink = read_write.sink()
-	next(sink)
-	command_parser = read_write.parse_cmd()
-	next(command_parser)
-	chunker = read_write.chunker(command_parser, sink)
-	next(chunker)
-	read_write.read_annotated_file(rel_input_path, chunker)
-	for dep_name in read_write.dep_table:
-		for dep_node in read_write.dep_table[dep_name]:
-			dep_node.parents.append(
-				set(read_write.desc_table.get(dep_name, list()))
-			)
-	for desc_name in read_write.desc_table:
-		for desc_node in read_write.desc_table[desc_name]:
-			desc_node.children.extend(
-				read_write.dep_table.get(desc_name, list())
-			)
-	read_write.dep_table = dict()
-	read_write.desc_table = dict()
-	x = top_sort(read_write.nodes, list())
-	if len(x) != len(read_write.nodes):
+def main(rel_input_path, rel_output_path, *args):
+	if os.path.isfile(rel_input_path):
+		helper(rel_input_path, rel_output_path, False)
+	elif os.path.isdir(rel_input_path):
+		for i, sub_path in enumerate(os.listdir(rel_input_path)):
+			out = rel_input_path + "/" + uuid.uuid4().hex + ".melzi"
+			if os.path.isdir(rel_input_path + "/" + sub_path):
+				main(rel_input_path + "/" + sub_path, out, *args)
+			elif os.path.isfile(rel_input_path + "/" + sub_path):
+				helper(rel_input_path + "/" + sub_path, out)
+		for sub_path in os.listdir(rel_input_path):
+			if sub_path.endswith(".melzi"):
+				consume_file(rel_input_path + "/" + sub_path)
+				os.remove(rel_input_path + "/" + sub_path)
+		link()
+		# build.write_final_file("../log.txt", build.nodes)
+		if rel_output_path.endswith(".melzi"):
+			ordering = loose_top_sort(build.nodes, list())
+			build.write_final_file(rel_output_path, ordering)
+		else:
+			ordering = strict_top_sort(build.nodes, list())
+			build.write_final_file(rel_output_path, ordering, False)
+		clean_up()
+
+
+def loose_top_sort(nodes, ordering):
+	ordering = top_sort(build.nodes, list())
+	while len(ordering) < len(build.nodes):
+		for node in build.nodes:
+			if not node.mark:
+				ordering.append(node)
+				node.mark = True
+				break
+		ordering = top_sort(build.nodes, ordering)
+	return ordering
+
+
+def strict_top_sort(nodes, ordering):
+	ordering = top_sort(build.nodes, list())
+	if len(ordering) != len(build.nodes):
 		raise Exception(
-			"No complete traversal possible! Either remove some constraints "
-			"or add more descriptions to the existing content."
+			"No complete traversal possible! Either remove some constraints or "
+			"add more descriptions to the existing content."
 		)
-	read_write.write_final_file(rel_output_path, x)
+	return ordering
+
+
+def helper(p1, p2, melzi_data=True):
+	consume_file(p1)
+	link()
+	ordering = loose_top_sort(build.nodes, list())
+	build.write_final_file(p2, ordering, melzi_data)
+	clean_up()
+
+
+def consume_file(path):
+	sink = build.sink()
+	next(sink)
+	command_parser = build.parse_cmd()
+	next(command_parser)
+	chunker = build.chunker(command_parser, sink)
+	next(chunker)
+	build.read_annotated_file(path, chunker)
+
+
+def link():
+	for dep_name in build.dep_table:
+		for dep_node in build.dep_table[dep_name]:
+			dep_node.parents.append(
+				set(build.desc_table.get(dep_name, list()))
+			)
+	for desc_name in build.desc_table:
+		for desc_node in build.desc_table[desc_name]:
+			desc_node.children.extend(
+				build.dep_table.get(desc_name, list())
+			)
+
+
+def clean_up():
+	build.desc_table = dict()
+	build.dep_table = dict()
+	build.nodes = list()
 
 
 def top_sort(nodes, ordering):
@@ -47,6 +104,16 @@ def top_sort(nodes, ordering):
 			node.mark = True
 			ordering = top_sort(node.children, ordering)
 	return ordering
+
+
+# def loc_opt_top_sort(nodes, ordering=None):
+# 	possibilities = list(filter(lambda e: len(e.parents) == 0, nodes))
+# 	ordering = list()
+# 	c = 0
+# 	while possibilities:
+# 		selection = None
+# 		best = float("inf")
+# 		reduce(lambda acc, e: acc["dist"])
 
 
 main(*sys.argv[1:])

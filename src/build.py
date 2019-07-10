@@ -50,6 +50,10 @@ def parse_cmd():
 			cmd = line[3:].strip(": ")
 			declared_entities.append(cmd)
 			associations = assoc
+		elif line.startswith("OPEN"):
+			raise Exception("Not yet implemented")
+		elif line.startswith("CLOSE"):
+			raise Exception("Not yet implemented")
 		else:
 			raise Exception(f"unknown command: {line}")
 
@@ -58,18 +62,24 @@ def parse_cmd():
 def chunker(parser, sink):
 	text = list()
 	associations = {"dependencies": list(), "descriptions": list()}
+	count = 0
 	while True:
 		line = (yield)
 		if line is None:
 			sink.send({"text": text, "associations": associations})
-		elif len(text) == 0 and line.startswith(sep):
+		elif not text and line.startswith(sep):
 			associations = parser.send((associations, line))
 		elif line.startswith(sep):
-			sink.send({"text": text, "associations": associations})
+			sink.send({
+				"text": text,
+				"associations": associations,
+				"position": count
+			})
+			count += 1
 			text = list()
 			associations = {"dependencies": list(), "descriptions": list()}
 			associations = parser.send((associations, line))
-		elif line != "":  # truly empty lines just get dropped
+		else:
 			text.append(line)
 
 
@@ -94,9 +104,16 @@ def read_annotated_file(rel_path: str, chunker):
 		chunker.send(None)
 
 
-def write_final_file(rel_path: str, ordering):
+def write_final_file(rel_path: str, ordering, melzi_data=True):
 	with open(rel_path, "w+") as f:
+		if melzi_data:
+			for entity in {**desc_table, **dep_table}:
+				f.write(f"||| DEC {entity}\n")
+			for desc in desc_table:
+				f.write(f"||| DESC {desc}\n")
+			for dep in dep_table:
+				if dep not in desc_table:
+					f.write(f"||| DEP {dep}\n")
 		for node in ordering:
 			for line in node.content:
-				f.write(line + "\n")
-			f.write("\n")
+				f.write(line)
