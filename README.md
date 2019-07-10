@@ -14,7 +14,8 @@ For simplicity here's the oneliner. Run the following in your terminal:
 `git clone https://github.com/AHBruns/TSort.git && chmod +x TSort/install.sh && ./TSort/install.sh`
 
 Once run, you'll likely have to restart your terminal. After this the utility
- can be called on any file by running any of the following commands:
+ can be called on any file or directory by running any of the following 
+ commands:
  
  - `tsort relative/path/to/input/file relative/path/to/output/file`
  - `moen relative/path/to/input/file relative/path/to/output/file`
@@ -93,6 +94,34 @@ blah blah blah
 ```
 does. Look in the src/test.txt for examples on how to structure your 
 documents.
+
+### Hierarchical Structures
+
+Many projects benefit from a hierarchical structure whose levels are each 
+sorted independently of each other. A good example is a novel. One might want
+ to sort the paragraphs of each chapter separately then sort the chapters 
+ themselves. This can be achieved through targeting a directory instead of a 
+ file with Melzi.
+ 
+When Melzi is used on a directory it recursively traverses looking for 
+files to sort. Each file is sorted individually then combined with the other
+ files in its immediate directory structure and sorted again. This goes on 
+ until Melzi has collated all the various files into a single output file.
+ 
+For instance Melzi would sort the following structure
+```
+         ---- book ----
+        |              |
+    - chp1 -        - chp2 -
+   |        |      |        |
+sec1.txt sec2.txt sec1.txt sec2.txt
+```
+by first sorting `book/chp1/sec1.txt`, `book/chp1/sec2.txt`, `book/chp2/sec1
+.txt`, and `book/chp2/sec2.txt` individually. Then sorting `book/chp1/sec1.txt`
+and `book/chp1/sec2.txt` together where each file is it's own node. 
+Then sorting `book/chp2/sec1.txt` and `book/chp2/sec2.txt` together where 
+each file is it's own node. Then, finally, sorting The results of the two 
+previous operations as individual nodes.
 
 ### Support
 
