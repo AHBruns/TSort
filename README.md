@@ -9,15 +9,11 @@ sorts text based on conceptual dependency.
 
 For simplicity here's the oneliner. Run the following in your terminal:
 
-`git clone https://github.com/AHBruns/TSort.git && chmod +x TSort/install.sh && ./TSort/install.sh`
+`git clone https://github.com/AHBruns/Melzi.git && chmod +x Melzi/install.sh && ./Melzi/install.sh`
 
 Once run, you'll likely have to restart your terminal. After this the utility
- can be called on any file or directory by running any of the following 
- commands:
- 
- - `tsort relative/path/to/input/file relative/path/to/output/file`
- - `moen relative/path/to/input/file relative/path/to/output/file`
- - `moenize relative/path/to/input/file relative/path/to/output/file`
+ can be called on any file or directory with the following 
+ command: `melzi relative/path/to/input/file relative/path/to/output/file`.
  
  **NOTE: The output can overwrite existing files. So, be sure to write to 
  either a non-existent file or an existing file that you're okay with 
